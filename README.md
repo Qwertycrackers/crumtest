@@ -39,4 +39,10 @@ though, so this is unlikely to be a common necessity.
 
 ### How Does It Work?
 `crumtest` works by use of `fork()` and `execve()`. The `execve()` system call essentially transforms the current process into the one pointed to by the argument of the
-function. The `fork()` call simply causes 
+function. The `fork()` call simply causes the current program to be duplicated to another process, leaving some information as to whether the program is the parent or child
+process. The child process redirects `stdin` and `stdout` to pipes pointing back to the parent process, and then runs the testing executable.
+
+In the parent process, the test input is piped in to the mock-`stdin`, and the parent then waits for the child to finish execution. The output is read from the mock-`stdout` and compared for errors, and any issues are passed up to the calling function. The main function catches these and produces nice output.
+
+The test cases are generated from a user-given file with simple delineation syntax. The input string is between square brackets(`[]`) and the expected output follows
+between curly braces(`{}`). Any other characters are ignored.
