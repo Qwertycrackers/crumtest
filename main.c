@@ -7,9 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Test.h"
+#include "ExecTest.h"
+
+void printUsage(); // function to print the proper way to use this program
 
 int main(int argc, char **argv) { // we're going to accept command-line args
-  TestCase *cases; // a dynamic array of the test cases
+  struct Test *cases; // a dynamic array of the test cases
   int numCases; // the number of cases
   int i = 0; // interator over the test cases
   int status = 0; // tracker for success
