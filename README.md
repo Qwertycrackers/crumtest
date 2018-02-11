@@ -1,4 +1,4 @@
-##### crumtest
+# crumtest
 Everyone knows that testing CS assignments is hard. You output needs to be character-perfect, and the human eye is pretty bad at ascertaining that. However, computers are
 quite good at doing tedious things for us, so now we have `crumtest`, named in honor of the Purdue professor who inspired this effort.
 
@@ -9,7 +9,7 @@ For example, to test my new program `a.out`, where my tests are saved in `crumte
 This could be futher simplified by use of a `Makefile` or somesuch. The program will give output for each successful test case, and give a diagnostic for failed tests.
 For now, it will attempt to continue running if a test fails, so you should expect output for every test.
 
-# Test Files
+### Test Files
 The program, of course, needs to know what inputs to give your program and what output to expect. This is configured in a **test file**, using simple syntax.
 
 Every test case is composed of input and output. In the test file, specify the input as a string enclosed in square braces, and the output as a following string enclosed
@@ -23,21 +23,21 @@ intelligent delineation scheme. For now, however, this will be fine.
 ## How to Get It
 Seeing as `crumtest` is a simple open-source package, there are multiple ways to get the software.
 
-# Downloading the Compiled Binary
+### Downloading the Compiled Binary
 If you're using `crumtest`, you're probably in a first-year programming class. As such, the easiest way to get it would be to download the binary release from the "Releases" tab on Github. Place the executable somewhere it can be found on the development machine (likely on your network drive, in the folder with your code), and run it as
 described in the **Usage** section.
 
-# Building from Source
+### Building from Source
 It is also, of course, possible and easy to build `crumtest` from source. This will be necessary if you wish to run the program on any architecture other than x86\_64.
 To do this, simply clone the repository and run
     make all
 This should generate a new `crumtest` executable. It can then be run as described in the **USAGE** section.
 
-## Cross-Platform Support
+### Cross-Platform Support
 `crumtest` is entirely dependent on the POSIX standard and Linux system calls. As such, it is completely incompatible with any OS other than Linux. The binaries offered in the **RELEASES** tabs are x86\_64, but this is not a requirement, and the program could entirely be compiled for other architectures. The Purdue Guru server is x86\_64
 though, so this is unlikely to be a common necessity.
 
-### How Does It Work?
+## How Does It Work?
 `crumtest` works by use of `fork()` and `execve()`. The `execve()` system call essentially transforms the current process into the one pointed to by the argument of the
 function. The `fork()` call simply causes the current program to be duplicated to another process, leaving some information as to whether the program is the parent or child
 process. The child process redirects `stdin` and `stdout` to pipes pointing back to the parent process, and then runs the testing executable.
