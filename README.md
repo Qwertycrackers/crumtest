@@ -14,6 +14,7 @@ The program, of course, needs to know what inputs to give your program and what 
 
 Every test case is composed of input and output. In the test file, specify the input as a string enclosed in square braces, and the output as a following string enclosed
 in curly braces. For example, if I want my program to take no input, and output "Hello World!", then somewhere in my test file I would add
+
     []
     {Hello World!}
 Whitespace in-between the bracket and curly-brace expressions will be ignored. To add another test case, simply add another set of bracket-and-curly-brace strings to be
@@ -30,6 +31,7 @@ described in the **Usage** section.
 ### Building from Source
 It is also, of course, possible and easy to build `crumtest` from source. This will be necessary if you wish to run the program on any architecture other than x86\_64.
 To do this, simply clone the repository and run
+
     make all
 This should generate a new `crumtest` executable. It can then be run as described in the **USAGE** section.
 
