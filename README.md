@@ -5,6 +5,7 @@ quite good at doing tedious things for us, so now we have `crumtest`, named in h
 ## Usage
 Run `crumtest` from the command line (obviously needs to be available in PATH somehow) with the executable as the first argument, and the test file as the second.
 For example, to test my new program `a.out`, where my tests are saved in `crumtests.txt`, I would type:
+
     crumtest a.out crumtests.txt
 This could be futher simplified by use of a `Makefile` or somesuch. The program will give output for each successful test case, and give a diagnostic for failed tests.
 For now, it will attempt to continue running if a test fails, so you should expect output for every test.
