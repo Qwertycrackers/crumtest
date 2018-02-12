@@ -18,7 +18,7 @@ int main(int argc, char **argv) { // we're going to accept command-line args
   int status = 0; // tracker for success
   char *testFile; // the name of the file containing tests. Given from argv
   char *testExec; // the name of the executable to test. Given from argv
-  char *error = NULL; // string to hold the dianostic errors
+  const char *error = NULL; // string to hold the dianostic errors
   if(argc < 3) {
     printUsage();
     return 0;

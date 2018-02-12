@@ -1,6 +1,6 @@
 #include "ExecTest.h"
 
-int diagnose(FILE *result, const char *expected, char **diag);
+int diagnose(FILE *result, const char *expected, const char **diag);
 
 int execTest(const char *executable, struct Test *testCase, char **error) {
   int in[2]; // pipe for input
@@ -41,13 +41,38 @@ int execTest(const char *executable, struct Test *testCase, char **error) {
     dup2(out[1],stdout); // duplicate the write side of the `out` pipe onto stdout
     fclose(in[1]); // no need to write into `stdin`
     fclose(out[0]); // no need to read from `stdout`
-    wstatus = execvp(executable, NULL); // start the test executable with no args. Reusing wstatus
-    exit(wstatus); // if we get here, `execvp` failed, so exit and return the error to our parent (probably -1)
+    exit(execvp(executable, NULL)); // start the test executable with no args. If it fails, exit returning the error code
   }
 }
 
-int diagnose(FILE *result, const char *expected, char **diag) { // check if output is correct, and return reasonable diagnosis
+int diagnose(FILE *result, const char *expected, const char **diag) { // check if output is correct, and return reasonable diagnosis
   int i = 0; // iterator through the result and expected
   char c; // character off the stream
   int lineNum = 1; // what line are we on
   int lineStartPos = 0; // position of the start of the current line
+  char *lineFrag; // fragment of a line for error output
+  while(1) {
+    if(expected[i] == '\n') {
+      lineNum++; // new line. This will make it behave a little odd when the error is a missing newline
+      lineStartPos = i + 1; // the next character is the first in the line.
+    }
+    c = getc(result); // get a character off the result
+    if(c == EOF) {
+      if(expected[i] == '\0') { // if we've reached both ends of files successfully
+        return 0; // diagnosis: successful
+      } else {
+        *diag = "Program output extended past expected output.\n"; // tell problem
+        return -1; // output failed test
+      } 
+    }
+    if(c != expected[i++]) { // if the character is discrepant
+      lineFrag = malloc(sizeof(char) * (i - lineStartPos + 2)); // allocate a string large enough to hold our line fragment
+      strncpy(expected + lineStartPos, lineFrag, sizeof(char) * (i - lineStartPos + 1)); // copy the expected fragment into `lineFrag`
+      lineFrag[i - lineStartPos + 1] = '\0'; // null-terminate the string
+      asprintf(diag,"Discrepancy was found at character %d, on line %d. Correct Line up to the error:\n%s\nDiscrepant character: %c\n",
+        i + 1, lineNum, lineFrag, c);
+      free(lineFrag); // free the allocated string
+      return -1;
+    }
+  }
+}
