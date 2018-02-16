@@ -22,6 +22,40 @@ Whitespace in-between the bracket and curly-brace expressions will be ignored. T
 tested. As far as a know, there are no assignments which include input with brackets or output with curly braces. If there ever are, this program will need a more 
 intelligent delineation scheme. For now, however, this will be fine.
 
+To clarify, `crumtest` reads literally every character between the `[]` and `{}`. This means, if your output includes a new line, then a new line should appear in the test case. As an example, most hello-world programs print a new line after the output. If your hello-world does this, then a correct test file would actually look like the following.
+
+    []
+    {Hello World!
+    }
+
+Yes, this does look awkward. But it is the simplest way to communicate the exact correct sequence of characters to the program. Another nuance is that the program looks 
+only at the **output** of the program, and will not check against input. Some example docs will simply be a play-by-play of the terminal, and in this case, the output will
+need to be omitted from the test case. Example: Your program has a use case like so:
+
+    >./program
+    Give me a number! -> 4
+    Give me another number! -> 5
+    
+    Numbers were: 4 5
+    >
+
+You would not be able you simple copy this verbatim into a test file, because the user inputs and program outputs need to be separated. A `crumtest` test file for 
+this interaction could be the following:
+
+    [4
+    5]
+
+    {Give me a number! -> Give me another number ->
+    Numbers were: 4 5
+    }
+
+As you can see, because the **user** entered the `4\n5\n`, those need to be in the **input** section. Likewise, the output section should not include these new lines,
+because the program does not print them out.
+
+The syntax described above is more difficult than I prefer, and I am open to suggestions as to how the system can be improved. However, the current model will get the job
+done. Additionally, if you are a Purdue student, I will try to maintain a list of canonical test-case files in the **Wiki** section of this page (found above). You may
+simply check if the current assignment has files up there, and use the ones I have written. Contributions to this list are, of course, welcome.
+
 ## How to Get It
 Seeing as `crumtest` is a simple open-source package, there are multiple ways to get the software.
 
@@ -33,8 +67,20 @@ described in the **Usage** section.
 It is also, of course, possible and easy to build `crumtest` from source. This will be necessary if you wish to run the program on any architecture other than x86\_64.
 To do this, simply clone the repository and run
 
-    make all
-This should generate a new `crumtest` executable. It can then be run as described in the **USAGE** section.
+    gcc *.c -o crumtest
+This should compile all C-files into a new `crumtest` executable. It can then be run as described in the **USAGE** section.
+
+### Purdue Guru PuTTY Guide
+If you are looking at this package, you are likely in Purdue CS159 and want to use this package. In order to do so, log into the Guru server with PuTTY and enter exactly
+the following commands (you may copy-paste)
+
+    git clone https://github.com/Qwertycrackers/crumtest.git
+    cd crumtest
+    ./install.sh
+
+After these, the program will have been compiled, and placed in your `CS159` folder. You can then invoke it by typing `../../crumtest [EXE] [TESTFILE]` from any lab or
+homework folder. Contact me (Joseph Gerardot, indyJAG@gmail.com) with any questions or confusion on this point. Remember that test files for most homeworks and labs 
+should become available on the **Wiki** section of this page.
 
 ### Cross-Platform Support
 `crumtest` is entirely dependent on the POSIX standard and Linux system calls. As such, it is completely incompatible with any OS other than Linux. The binaries offered in the **RELEASES** tabs are x86\_64, but this is not a requirement, and the program could entirely be compiled for other architectures. The Purdue Guru server is x86\_64
