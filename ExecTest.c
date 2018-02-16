@@ -106,6 +106,9 @@ int swrite(int fd, const char *s) {
   puts("Beginning the write loop.");
   #endif
   while(s[i] != '\0') {
+    #ifdef CRUM_DEBUG
+    printf("Writing char %c into input file.");
+    #endif
     write(fd, s + i++, sizeof(char));
   } // write bytes until we hit the null terminator. Do not write the terminator
   #ifdef CRUM_DEBUG

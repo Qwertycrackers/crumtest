@@ -39,10 +39,10 @@ int main(int argc, char **argv) { // we're going to accept command-line args
     #endif
     switch(execTest(testExec,cases + i++, &error)) { // switch on result of test, increment i along with pointer arithmetic
       case 0:
-        printf("Test %d resolved successfully.\n", i+1);
+        printf("Test %d resolved successfully.\n", i);
         break; 
       case -1:
-        printf("Test %d failed. Reason: \n%s", i + 1, error);
+        printf("Test %d failed. Reason: \n%s", i, error);
         free(error);
         error = NULL;
         break;
@@ -53,7 +53,7 @@ int main(int argc, char **argv) { // we're going to accept command-line args
         error = NULL;
         break;
       default:
-        puts("Default case reached.");
+        puts("Default case reached. This indicates a problem");
     }
   }
   printf("%d tests completed!\n", numCases); // tell how many tests are completed
