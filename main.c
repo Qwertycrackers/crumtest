@@ -18,7 +18,7 @@ int main(int argc, char **argv) { // we're going to accept command-line args
   int status = 0; // tracker for success
   char *testFile; // the name of the file containing tests. Given from argv
   char *testExec; // the name of the executable to test. Given from argv
-  const char *error = NULL; // string to hold the dianostic errors
+  char *error = NULL; // string to hold the dianostic errors
   if(argc < 3) {
     printUsage();
     return 0;
@@ -26,11 +26,17 @@ int main(int argc, char **argv) { // we're going to accept command-line args
   testExec = argv[1]; // the second element (first argument) should be the executable.
   testFile = argv[2]; // the third element (second argument) should be the test file.
 
-  if(genTestCases(testFile, &cases, &numCases) != 0) {
+  if(genTests(testFile, &cases, &numCases) != 0) {
     puts("Error encountered when generating test cases! Aborting...");
     return -1;
   } // generate the test cases, and complain if something goes wrong. `cases` should now be an array of TestCases.
+  #ifdef CRUM_DEBUG
+  printf("%d test cases registered. Entering testing loop\n",numCases);
+  #endif
   while(i < numCases) {
+    #ifdef CRUM_DEBUG
+    printf("Beginning test %d\n", i + 1);
+    #endif
     switch(execTest(testExec,cases + i++, &error)) { // switch on result of test, increment i along with pointer arithmetic
       case 0:
         printf("Test %d resolved successfully.\n", i+1);
@@ -47,7 +53,13 @@ int main(int argc, char **argv) { // we're going to accept command-line args
         error = NULL;
         break;
       default:
+        puts("Default case reached.");
     }
   }
+  printf("%d tests completed!\n", numCases); // tell how many tests are completed
   return status;
+}
+
+void printUsage() {
+  puts("crumtest is a unit-tester for simple CS homework executables.\nv0.0.1\nAuthor: Joseph Gerardot\nUsage:\ncrumtest [EXECUTABLE] [TEST FILE]");
 }

@@ -29,6 +29,9 @@ int countTests(FILE *file) {
   do {
     c = getc(file); // get the next char
     if(c == '[') {
+      #ifdef CRUM_DEBUG
+        puts("Found a bracket");
+      #endif
       count++;
     } // count every opening brace as a test. Clearly will cause problems if the input is supposed to include opening braces, but that's for another time.
   } while(c != EOF);
