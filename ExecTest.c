@@ -84,8 +84,8 @@ int diagnose(int result, const char *expected, char **diag) { // check if output
       lineFrag = malloc(sizeof(char) * (i - lineStartPos + 2)); // allocate a string large enough to hold our line fragment
       strncpy(lineFrag, expected + lineStartPos,  sizeof(char) * (i - lineStartPos + 1)); // copy the expected fragment into `lineFrag`
       lineFrag[i - lineStartPos + 1] = '\0'; // null-terminate the string
-      asprintf(diag,"Discrepancy was found at character %d, on line %d. Line up to the error:\n%s\nDiscrepant character: %c\n",
-        i + 1, lineNum, lineFrag, c);
+      asprintf(diag,"Discrepancy was found at character %d, on line %d. Line up to the error:\n%s\nDiscrepant character: %c\nExpected character: %c\n",
+        i + 1, lineNum, lineFrag, c, expected[i]);
       free(lineFrag); // free the allocated string
       return -1;
     } 
