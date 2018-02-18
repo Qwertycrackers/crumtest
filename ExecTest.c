@@ -73,7 +73,7 @@ int diagnose(int result, const char *expected, char **diag) { // check if output
       if(expected[i] == '\0') { // if we've reached both ends of files successfully
         return 0; // diagnosis: successful
       } else {
-        *diag = "Program output extended past expected output.\n"; // tell problem
+        asprintf(diag,"Program output was insufficiently long.\n"); // tell problem
         return -1; // output failed test
       } 
     }
